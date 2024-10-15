@@ -1,3 +1,6 @@
+> [!NOTE]
+> This is a fork of yuushya-townscape. You can find the original sources here https://gitee.com/yuushyatownscape/yuushya-townscape
+
 ![输入图片说明](YuushyaI.png)
 
 # Yuushya Townscape
