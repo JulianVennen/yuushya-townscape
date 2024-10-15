@@ -24,6 +24,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +38,7 @@ public class CollisionFileReader {
 
     private static Map<String, CollisionItem> collisionMap = new HashMap<>();
     public static Path COLLISION_FILES = Platform.getConfigFolder().resolve("./com.yuushya/");
+    private static boolean loadedCollisions = false;
 
     public static void readAllFileSelf(){
         Set<String> set=  YuushyaRegistries.BlockALL.keySet();
@@ -85,7 +88,15 @@ public class CollisionFileReader {
     }
 
     public static void readAllCollision(){
-        getCollisionMap().forEach((key, value) -> readCollisionToVoxelShape(key));
+        if (!loadedCollisions) {
+            Instant before = Instant.now();
+            System.out.println("CollisionFileReader.readAllCollision  PRE: " + getCollisionMap().size());
+            getCollisionMap().forEach((key, value) -> readCollisionToVoxelShape(key));
+            Instant after = Instant.now();
+            System.out.println("CollisionFileReader.readAllCollision POST: " + getCollisionMap().size() +
+                    ", time: " + Duration.between(before, after).toMillis() + "ms");
+            loadedCollisions = true;
+        }
     }
 
     public static void readCollisionToVoxelShape(Map<BlockState,VoxelShape> cache,Block block,String namespaceid){
